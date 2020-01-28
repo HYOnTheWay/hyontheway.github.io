@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.60.1" />
+
+  <title>正则表达 &middot; HY&#39;s blog</title>
+
+    
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://hyontheway.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+    
+        <link rel="stylesheet" href="https://hyontheway.github.io/css/my.css">
+    
+  
+  
+    
+        <script src="https://hyontheway.github.io/js/my.js"></script>
+    
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://hyontheway.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/contact/"><i class='fa fa-phone fa-fw'></i>Contact</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/*" rel="me" target="_blank"><i class="fab fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/HYOnTheWay" rel="me" target="_blank"><i class="fab fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>正则表达</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>28 Jan 2020, 18:29</time>
+  </div>
+
+  
+
+  
+
+  
+
+</div>
+
+  <ul>
+<li>
+<p><input disabled="" type="checkbox">为什么使用正则?</p>
+<p>用于对文本进行复杂处理.(语法规则)</p>
+</li>
+</ul>
+<h3 id="1">1.基本语法</h3>
+<ul>
+<li>
+<h4 id="heading">普通字符</h4>
+<ul>
+<li>字母,数组,汉字,下划线,以及没有特殊定义的标点符号,都是&quot;普通字符&rdquo;.表达式中的普通字符,在匹配一个字符串的时候,<strong>匹配与之相同的一个字符</strong></li>
+</ul>
+</li>
+<li>
+<h4 id="heading1">简单的转义字符</h4>
+<table>
+<thead>
+<tr>
+<th align="center">\n</th>
+<th align="center">代表转行符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">\t</td>
+<td align="center">制表符</td>
+</tr>
+<tr>
+<td align="center">\\</td>
+<td align="center">代表\本身</td>
+</tr>
+<tr>
+<td align="center">\ ^,\ $,\ . ,\ ?,\ * 等</td>
+<td align="center">匹配这些字符本身</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<h4 id="heading2">标准字符集合</h4>
+<ul>
+<li>能够与<strong>多种字符</strong>匹配的表达式</li>
+<li><em><strong>注意区分大小写,大写是相反的意思</strong></em></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">\d</th>
+<th align="center">任意一个数字,0-9中的任意一个</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">\w</td>
+<td align="center">任意一个字母或数字或下划线,也就是A~Z,a~z,0~9,_中任意一个</td>
+</tr>
+<tr>
+<td align="center">\s</td>
+<td align="center">包括空格,制表符,换行符等空白字符的其中任意一个</td>
+</tr>
+<tr>
+<td align="center">.</td>
+<td align="center">小数点可以匹配任意一个字符(除了换行符),如果要匹配包括&rdquo;\n&quot;在内的所有字符,一般用[\s\S]</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<h4 id="heading3">自定义字符集合:</h4>
+<ul>
+<li>
+<p><input disabled="" type="checkbox">方括号匹配方式,能够匹配方括号中<strong>任意一个</strong>字符</p>
+<table>
+<thead>
+<tr>
+<th align="center">[ab5@]</th>
+<th align="center">匹配&quot;a&quot;或&quot;b&quot;或&quot;5&quot;或&rdquo;@&rdquo;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">[^abc]</td>
+<td align="center">匹配&quot;a&rdquo;,&ldquo;b&rdquo;,&ldquo;c&rdquo;<em><strong>之外</strong></em>的任意一个字符</td>
+</tr>
+<tr>
+<td align="center">[f-k]</td>
+<td align="center">匹配&quot;f&quot;~&quot;k&quot;之间的任意一个字母</td>
+</tr>
+<tr>
+<td align="center">[^A-F0-3]</td>
+<td align="center">匹配&quot;A&quot;~&quot;F&rdquo;,&ldquo;0&quot;~&quot;3&quot;之外的任意一个字符</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>正则表达式的特殊符号,被包含到中括号中,则失去特殊意义,除了^,-之外.</p>
+</li>
+<li>
+<p>标准字符集合,除小数点外,如果被包含于中括号,自定义字符集合将包含该集合.如:</p>
+<ul>
+<li>[\d.-+]将匹配:数字,小数点,+,-</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<h4 id="heading4">量词</h4>
+<ul>
+<li>
+<p>修饰匹配次数的特殊符号</p>
+<table>
+<thead>
+<tr>
+<th align="center">{n}</th>
+<th align="center">表达式重复n次</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">{m,n}</td>
+<td align="center">表达式至少重复m次,最多重复n次</td>
+</tr>
+<tr>
+<td align="center">{m,}</td>
+<td align="center">表达式至少重复m次</td>
+</tr>
+<tr>
+<td align="center">?</td>
+<td align="center">匹配表达式0次或者1次,相当于{0,1}</td>
+</tr>
+<tr>
+<td align="center">+</td>
+<td align="center">表达式至少出现1次,相当于{1,}</td>
+</tr>
+<tr>
+<td align="center">*</td>
+<td align="center">表达式不出现或出现任意次,相当于{0,}</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>匹配次数中的<strong>贪婪模式(匹配字符越多越好,默认!)</strong></p>
+</li>
+<li>
+<p>匹配次数中的<strong>非贪婪模式(匹配字符越少越好,修饰匹配次数的特殊符号后面在加一个&rdquo;?&ldquo;号)</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2">2.高级语法</h3>
+<ul>
+<li>
+<h4 id="heading5">字符边界</h4>
+<ul>
+<li>(本组标记匹配的不是字符而是位置,符合某种条件的位置)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">^</th>
+<th align="center">与字符串开始的地方匹配</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">$</td>
+<td align="center">与字符串结束的地方匹配</td>
+</tr>
+<tr>
+<td align="center">\b</td>
+<td align="center">匹配一个单词边界</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>\b匹配这样一个位置 : 前面的字符和后面的字符不全是\w</li>
+</ul>
+</li>
+<li>
+<h4 id="heading6">匹配模式</h4>
+<ul>
+<li><strong>IGNORECASE 忽略大小写模式</strong>
+<ul>
+<li>匹配时忽略大小写</li>
+<li>默认情况下,正则表达式是要区分大小写</li>
+</ul>
+</li>
+<li><strong>SINGLELINE 单行模式</strong>
+<ul>
+<li>整个文本看作一个字符串,只有一个开头,一个结尾.</li>
+<li>使小数点&rdquo;.&ldquo;可以匹配包含换行符(\n)在内的任意字符.</li>
+</ul>
+</li>
+<li><strong>MULTILINE 多行模式</strong>
+<ul>
+<li>每行都是一个字符串,都有开头和结尾.</li>
+<li>在指定了MULTILINE之后,如果需要仅匹配字符串开始和结束的位置,可以使用\A和\Z.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<h4 id="heading7">选择符和分组</h4>
+<table>
+<thead>
+<tr>
+<th align="center">表达式</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">| 分支结构</td>
+<td align="left">左右两边表达式之间&quot;或&quot;关系,匹配左边或者右边</td>
+</tr>
+<tr>
+<td align="center">() 捕获组</td>
+<td align="left">(1).在被修饰匹配次数的时候,括号中的表达式可以作为整体被修饰 (2).取匹配结果的时候,括号中表达式匹配到的内容可以被单独得到  (3).每一对括号会分配一个编号,使用()的捕获根据左括号的顺序从1开始自动编号.捕获元素编号为零的第一个捕获是由整个正则表达式模式匹配的文本</td>
+</tr>
+<tr>
+<td align="center">(?:Expression)</td>
+<td align="left">一些表达式中,不得不使用(),但又不需要保存()中子表达式匹配的内容,这时可以用非捕获组来抵消使用()带来的副作用</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<h4 id="nnn">反向引用(\nnn)</h4>
+<ul>
+<li>每一对()会分配一个编号,使用()的捕获<strong>根据左括号的顺序从1开始自动编号.</strong>
+<ul>
+<li>通过反向引用,可以对<strong>分组已捕获的字符串</strong>进行引用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<h4 id="heading8">预搜索(零宽断言)</h4>
+<ul>
+<li>只进行子表达式的匹配,匹配内容不计入最终的匹配结果,是零宽度</li>
+<li>这个位置应该符合某个条件.判断当前位置的前后字符,是否符合指定条件,但不匹配前后的字符.是对位置的匹配.</li>
+<li>正则表达式匹配过程中,如果子表达式匹配到的是字符内容,而非位置,并被保存到最终的匹配结果中,那么就人为这个子表达式是占有字符的;如果子表达式匹配的仅仅是位置,或者匹配的内容并不保存到最终的匹配结果中,那么就认为这个子表达式是<strong>零宽度</strong>的.占有字符还是零宽度,是针对匹配的内容是否保存到最终的匹配结果中而言.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">(?=exp)</th>
+<th align="center">断言自身出现的位置的后面能匹配表达式exp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">(?&lt;=exp)</td>
+<td align="center">断言自身出现的位置的前面能匹配表达式exp</td>
+</tr>
+<tr>
+<td align="center">(?!exp)</td>
+<td align="center">断言此位置的后面不能匹配表达式exp</td>
+</tr>
+<tr>
+<td align="center">(?&lt;!exp)</td>
+<td align="center">断言此位置的前面不能匹配表达式exp</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<ul>
+<li>
+<h4 id="01">练习01(电话号码验证)</h4>
+<ul>
+<li>
+<p>1.电话号码由数字和&rdquo;_&ldquo;构成.</p>
+</li>
+<li>
+<p>2.电话号码为7到8位.</p>
+</li>
+<li>
+<p>3.如果电话号码中包含区号,那么区号位三位或四位,首位是0.</p>
+</li>
+<li>
+<p>4.区号用&rdquo;_&ldquo;和其他部分隔开</p>
+</li>
+<li>
+<p>5.移动电话号码为11位</p>
+</li>
+<li>
+<p>6.11位移动电话号码的第一位和第二位为&quot;13&rdquo;,&ldquo;15&rdquo;,&ldquo;18&rdquo;</p>
+<p><strong>010-8888999/1333444445555    =   (0\d{2,3}-\d{7,8})|(1[35789]\d{9})</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<h4 id="02">练习02(电子邮箱验证)</h4>
+<p>​		<strong><a href="mailto:1312579818@qq.com.cn">1312579818@qq.com.cn</a>  =  [\w \ -]+@[a-z0-9A-Z]+(\ .[a-zA-Z]{2,3}){1,2}</strong></p>
+<p>​		首先匹配字母数字下划线和-多位;然后@加匹配大小写字母和数字多位;点转义字符大小写2到3位一共整个(\ .[a-zA-Z]{2,3})为1到2次;</p>
+</li>
+<li>
+<h4 id="heading9">常用正则别表</h4>
+<table>
+<thead>
+<tr>
+<th align="center">匹配中文字符</th>
+<th align="center">[\u4e00-\u9fa5]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">匹配空白行</td>
+<td align="center">\n\s*\r</td>
+</tr>
+<tr>
+<td align="center">匹配HTML标记</td>
+<td align="center">&lt;(\S*?)[ ^&gt;] *&gt;. *?&lt;/\1&gt;|&lt;. *?/&gt;</td>
+</tr>
+<tr>
+<td align="center">匹配首尾空白字符</td>
+<td align="center">^\s*|\s *$</td>
+</tr>
+<tr>
+<td align="center">匹配Email地址</td>
+<td align="center">\w+([-+.]\w+)*@\w+([-.]\w+) *\ .\w+([-.]\w+) *</td>
+</tr>
+<tr>
+<td align="center">匹配网址URL</td>
+<td align="center">[a-zA-Z]+://[ ^\s]*</td>
+</tr>
+<tr>
+<td align="center">匹配国内电话号码</td>
+<td align="center">\d{3}-\d{8}|\d{4}-\d{7}</td>
+</tr>
+<tr>
+<td align="center">匹配腾讯QQ号</td>
+<td align="center">[1-9] [0-9]{4,}</td>
+</tr>
+<tr>
+<td align="center">匹配中国邮政编码</td>
+<td align="center">[1-9]\d{5}(?!\d)</td>
+</tr>
+<tr>
+<td align="center">匹配身份证</td>
+<td align="center">\d{15}|\d{18}</td>
+</tr>
+<tr>
+<td align="center">匹配IP地址</td>
+<td align="center">\d+\ .\d+\ .\d+\ .\d+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<h4 id="demo">demo</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//匹配
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Demo01</span><span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[</span><span style="color:#f92672">]</span> args<span style="color:#f92672">)</span><span style="color:#f92672">{</span>
+        <span style="color:#75715e">//在整个字符串:asfasadwa02d1689,是否符合指定的正则表达式:\w+
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//表达式对象
+</span><span style="color:#75715e"></span>        Pattern p <span style="color:#f92672">=</span> Pattern<span style="color:#f92672">.</span><span style="color:#a6e22e">compile</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;\\w+&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#75715e">//创建Matcher对象
+</span><span style="color:#75715e"></span>        Matcher m <span style="color:#f92672">=</span> p<span style="color:#f92672">.</span><span style="color:#a6e22e">matcher</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;asfasadwa02d1689&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        Boolean result <span style="color:#f92672">=</span> m<span style="color:#f92672">.</span><span style="color:#a6e22e">matches</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        sout<span style="color:#f92672">(</span>result<span style="color:#f92672">)</span><span style="color:#f92672">;</span><span style="color:#75715e">//true
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//分组输出
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Demo02</span><span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[</span><span style="color:#f92672">]</span> args<span style="color:#f92672">)</span><span style="color:#f92672">{</span>
+        <span style="color:#75715e">//表达式对象
+</span><span style="color:#75715e"></span>        Pattern p <span style="color:#f92672">=</span> Pattern<span style="color:#f92672">.</span><span style="color:#a6e22e">compile</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;([a-z]+)([0-9]+)&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#75715e">//创建Matcher对象
+</span><span style="color:#75715e"></span>        Matcher m <span style="color:#f92672">=</span> p<span style="color:#f92672">.</span><span style="color:#a6e22e">matcher</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;aa332**ssd445*sds223&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#75715e">//分组输出
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>m<span style="color:#f92672">.</span><span style="color:#a6e22e">find</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">{</span>
+          sout<span style="color:#f92672">(</span>m<span style="color:#f92672">.</span><span style="color:#a6e22e">group</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span> <span style="color:#75715e">//aa332
+</span><span style="color:#75715e"></span>            sout<span style="color:#f92672">(</span>m<span style="color:#f92672">.</span><span style="color:#a6e22e">group</span><span style="color:#f92672">(</span>1<span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span><span style="color:#75715e">//aa
+</span><span style="color:#75715e"></span>            sout<span style="color:#f92672">(</span>m<span style="color:#f92672">.</span><span style="color:#a6e22e">group</span><span style="color:#f92672">(</span>2<span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span><span style="color:#75715e">//332
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//分割字符串
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Demo02</span><span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[</span><span style="color:#f92672">]</span> args<span style="color:#f92672">)</span><span style="color:#f92672">{</span>
+        String str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;a8948b151c36&#34;</span><span style="color:#f92672">;</span>
+        String arrs <span style="color:#f92672">=</span> str<span style="color:#f92672">.</span><span style="color:#a6e22e">split</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;\\d+&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        sout<span style="color:#f92672">(</span>Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(</span>arrs<span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div></li>
+</ul>
+
+  
+  <h4><i class="fa-share-alt" aria-hidden="true"></i>&nbsp;Share!</h4>
+<ul class="share-buttons">
+	<li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%25AD%25A3%25E5%2588%2599%25E8%25A1%25A8%25E8%25BE%25BE%2f" target="_blank" title="Share on Facebook"><i class="fa-facebook" aria-hidden="true"></i><span class="sr-only">Share on Facebook</span></a>
+	</li>&nbsp;&nbsp;&nbsp;
+	<li><a href="https://twitter.com/intent/tweet?source=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%25AD%25A3%25E5%2588%2599%25E8%25A1%25A8%25E8%25BE%25BE%2f&via=HorribleGeek" target="_blank" title="Tweet"><i class="fa-twitter" aria-hidden="true"></i><span class="sr-only">Tweet</span></a>
+	</li>&nbsp;&nbsp;&nbsp;
+	<li><a href="https://plus.google.com/share?url=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%25AD%25A3%25E5%2588%2599%25E8%25A1%25A8%25E8%25BE%25BE%2f" target="_blank" title="Share on Google+"><i class="fa-google-plus" aria-hidden="true"></i><span class="sr-only">Share on Google+</span></a>
+	</li>&nbsp;&nbsp;&nbsp;
+	<li><a href="http://www.tumblr.com/share?v=3&u=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%25AD%25A3%25E5%2588%2599%25E8%25A1%25A8%25E8%25BE%25BE%2f" target="_blank" title="Post to Tumblr"><i class="fa-tumblr" aria-hidden="true"></i><span class="sr-only">Post to Tumblr</span></a>
+	</li>&nbsp;&nbsp;&nbsp;
+	<li><a href="http://pinterest.com/pin/create/button/?url=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%25AD%25A3%25E5%2588%2599%25E8%25A1%25A8%25E8%25BE%25BE%2f" target="_blank" title="Pin it"><i class="fa-pinterest-p" aria-hidden="true"></i><span class="sr-only">Pin it</span></a>
+	</li>&nbsp;&nbsp;&nbsp;
+	<li><a href="http://www.reddit.com/submit?url=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%25AD%25A3%25E5%2588%2599%25E8%25A1%25A8%25E8%25BE%25BE%2f" target="_blank" title="Submit to Reddit"><i class="fa-reddit-alien" aria-hidden="true"></i><span class="sr-only">Submit to Reddit</span></a>
+	</li>
+</ul>
+
+
+<style>
+	ul.share-buttons{
+	  list-style: none;
+	  padding: 0;
+	}
+
+	ul.share-buttons li{
+	  display: inline;
+	}
+
+	ul.share-buttons .sr-only{
+	  position: absolute;
+	  clip: rect(1px 1px 1px 1px);
+	  clip: rect(1px, 1px, 1px, 1px);
+	  padding: 0;
+	  border: 0;
+	  height: 1px;
+	  width: 1px;
+	  overflow: hidden;
+	}
+</style>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://hyontheway.github.io/post/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://hyontheway.github.io/post/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/">搭建个人博客网站</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'HY';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="https://hyontheway.github.io/js/ui.js"></script>
+<script src="https://hyontheway.github.io/js/menus.js"></script>
+
+
+<script>
+  
+  if (window.location.hostname != "localhost") {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'Your Google Analytics tracking ID', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+
+
+<script src="https://hyontheway.github.io/js/math-code.js"></script>
+  <script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+
+
+</body>
+</html>
+
