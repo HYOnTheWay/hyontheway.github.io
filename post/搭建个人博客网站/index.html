@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.60.1" />
+
+  <title>搭建个人博客网站 &middot; HY&#39;s blog</title>
+
+    
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://hyontheway.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+    
+        <link rel="stylesheet" href="https://hyontheway.github.io/css/my.css">
+    
+  
+  
+    
+        <script src="https://hyontheway.github.io/js/my.js"></script>
+    
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://hyontheway.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/contact/"><i class='fa fa-phone fa-fw'></i>Contact</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/*" rel="me" target="_blank"><i class="fab fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/HYOnTheWay" rel="me" target="_blank"><i class="fab fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>搭建个人博客网站</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>28 Jan 2020, 17:45</time>
+  </div>
+
+  
+
+  
+
+  
+
+</div>
+
+  <h2 id="1hugo">1.安装hugo在本地,做仓库</h2>
+<h4 id="1windowschoco">1.在windows下安装choco</h4>
+<p><a href="https://link.jianshu.com?t=https://chocolatey.org/">chocolatey</a>是windows下的一个命令行的包管理工具，类似ubuntu的apt，或centos下的yum。 参考博客(<a href="https://blog.csdn.net/LuCh1Monster/article/details/100763275#2__choco_6">https://blog.csdn.net/LuCh1Monster/article/details/100763275#2__choco_6</a>)</p>
+<ul>
+<li>1.准备环境
+<ul>
+<li>在安装之前，你先要将你的powershell设置为允许执行远程脚本：
+<ul>
+<li>以管理员身份来打开PowerShell</li>
+<li>命令行里输入<code>Set-ExecutionPolicy RemoteSigned</code> 然后<code>Y</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>2.安装choco
+<ul>
+<li><code>iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex</code></li>
+<li>完成安装cmd中输入choco
+<ul>
+<li>Chocolatey v0.10.15
+Please run &lsquo;choco -?&rsquo; or &lsquo;choco <!-- raw HTML omitted --> -?&rsquo; for help menu.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2chocohugo">2.使用choco去安装hugo</h4>
+<pre><code>#在指定的盘安装hugo
+choco install hugo -confirm
+
+#配置环境path
+
+#cmd使用
+hugo version
+cd hugo文件夹
+
+#创建一个新站点
+hugo new site blog文件夹名
+
+#进入根目录下
+git clone .....................(克隆主题)官网(https://themes.gohugo.io/)
+
+#克隆完后,就可以在根目录下找到主题名,启动
+cd ..
+hugo server -t XXX(主题名) --buildDrafts  
+
+#访问端口1313
+localhost:1313
+
+#写博客
+hugo new post/XXX.md
+
+#编辑XXX博客,OK
+</code></pre><h4 id="3github">3.将博客部署到github上</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#960050;background-color:#1e0010">#</span>将hugo主题和github联系
+hugo <span style="color:#f92672">-</span><span style="color:#f92672">-</span>theme<span style="color:#f92672">=</span>XXX<span style="color:#f92672">(</span>主题名<span style="color:#f92672">)</span> <span style="color:#f92672">-</span><span style="color:#f92672">-</span>baseUrl<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://onthewayofyourself.github.io/&#34;</span> <span style="color:#f92672">-</span><span style="color:#f92672">-</span>buildDrafts
+
+<span style="color:#960050;background-color:#1e0010">#</span>创建一个仓库<span style="color:#f92672">,</span>名字必须和你的用户名相同且全为小写
+XXXXXX<span style="color:#f92672">.</span><span style="color:#a6e22e">github</span><span style="color:#f92672">.</span><span style="color:#a6e22e">io</span>
+
+<span style="color:#960050;background-color:#1e0010">#</span>进入public文件夹
+cd <span style="color:#66d9ef">public</span>
+git init
+git add <span style="color:#f92672">.</span>
+git commit <span style="color:#f92672">-</span>m <span style="color:#e6db74">&#34;commit message&#34;</span>
+
+<span style="color:#960050;background-color:#1e0010">#</span>根据自己情况填写
+git remote add origin https<span style="color:#f92672">:</span><span style="color:#75715e">//github.com/(用户名)/XXXXXXX.github.io.git
+</span><span style="color:#75715e"></span>
+git push <span style="color:#f92672">-</span>u origin master
+ 
+<span style="color:#960050;background-color:#1e0010">#</span>访问自己博客<span style="color:#f92672">,</span>直接输入即可
+XXXXX<span style="color:#f92672">.</span><span style="color:#a6e22e">github</span><span style="color:#f92672">.</span><span style="color:#a6e22e">io</span>
+</code></pre></div><h4 id="4">4.发布博客</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">hugo <span style="color:#66d9ef">new</span> post<span style="color:#f92672">/</span>newBlog<span style="color:#f92672">.</span><span style="color:#a6e22e">md</span>
+<span style="color:#960050;background-color:#1e0010">–</span>生成静态页面
+hugo <span style="color:#f92672">-</span><span style="color:#f92672">-</span>theme<span style="color:#f92672">=</span>blackburn <span style="color:#f92672">-</span><span style="color:#f92672">-</span>buildDrafts <span style="color:#f92672">-</span><span style="color:#f92672">-</span>baseUrl<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://ohohhh.github.io/&#34;</span>
+<span style="color:#960050;background-color:#1e0010">—</span>发布
+cd <span style="color:#66d9ef">public</span>
+git add <span style="color:#f92672">.</span>
+git commit <span style="color:#f92672">-</span>m <span style="color:#e6db74">&#34;new blog added&#34;</span>
+git push origin master
+
+</code></pre></div><h2 id="2hugo">2.安装hugo在服务器上,搭建博客</h2>
+<h4 id="1snap">1.首选要先安装snap(我用的是阿里云服务器)</h4>
+<p>centos 7 新一代包管理工具 snap 安装部署什么是snap，snap是一种全新的软件包管理方式，它类似一个容器拥有一个应用程序所有的文件和库，各个应用程序之间完全独立。所以使用snap包的好处就是它解决了应用程序之间的依赖问题，使应用程序之间更容易管理。但是由此带来的问题就是它占用更多的磁盘空间。
+Snap的安装包扩展名是.snap，类似于一个容器，它包含一个应用程序需要用到的所有文件和库（snap包包含一个私有的root文件系统，里面包含了依赖的软件包）。它们会被安装到单独的目录；各个应用程序之间相互隔离。使用snap有很多好处，首先它解决了软件包的依赖问题；其次，也使应用程序更容易管理。现在支持snap的应用并不多，snap软件包一般安装在/snap目录下.</p>
+<ul>
+<li>
+<p>1.安装 EPEL</p>
+<pre><code>yum install epel-release
+</code></pre></li>
+</ul>
+<ul>
+<li>
+<p>2.安装 snapd</p>
+<pre><code>yum install snapd
+</code></pre></li>
+<li>
+<p>3.添加snap启动通信 socket</p>
+<pre><code>systemctl enable --now snapd.socket
+</code></pre></li>
+<li>
+<p>4.创建链接（snap软件包一般安装在/snap目录下）</p>
+<pre><code>ln -s /var/lib/snapd/snap /snap
+</code></pre></li>
+</ul>
+<h4 id="2">2.常用的命令</h4>
+<p><a href="https://docs.snapcraft.io/installing-snap-on-centos/10020">https://docs.snapcraft.io/installing-snap-on-centos/10020</a></p>
+<pre><code># 切换软件仓库
+
+#扩展
+snap refresh hugo --channel=extended 
+
+#稳定
+snap refresh hugo --channel=stable.
+
+# 更新一个snap包，
+
+如果你后面不加包的名字的话那就是更新所有的snap包
+
+sudo snap refresh &lt;snap name&gt;
+
+# 列出已经安装的snap包
+
+sudo snap list
+
+# 搜索要安装的snap包
+
+sudo snap find &lt;text to search&gt;
+
+# 安装一个snap包
+
+sudo snap install &lt;snap name&gt;
+
+# 把一个包还原到以前安装的版本
+
+snap revert &lt;snap name&gt;
+
+# 删除一个snap包
+
+sudo snap remove &lt;snap name&gt;
+</code></pre><h4 id="3snapyumhugo">3.使用snap或者yum去安装hugo</h4>
+<p>1.图();</p>
+<h5 id="21">2.或者这样安装</h5>
+<ul>
+<li>
+<p>添加epel repo   /etc/yum.repos.d/hugo.repo</p>
+<p>vim /etc/yum.repos.d/hugo.repo</p>
+<p>[daftaupe-hugo]
+name=Copr repo for hugo owned by daftaupe
+baseurl=https://copr-be.cloud.fedoraproject.org/results/daftaupe/hugo/epel-7-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://copr-be.cloud.fedoraproject.org/results/daftaupe/hugo/pubkey.gpg
+repo_gpgcheck=0
+enabled=1</p>
+</li>
+<li>
+<p>执行安装 hugo</p>
+</li>
+</ul>
+<pre><code>yum -y install hugo
+#查看版本
+hugo version
+</code></pre><ul>
+<li>
+<p>安装完成后,搭建博客平台</p>
+</li>
+<li>
+<pre><code>#创建博客根目录
+hugo new site XXXX(文件名)
+  
+#进入根目录下的themes中
+cd themes
+git clone .....................(克隆主题)官网(https://themes.gohugo.io/)
+  
+#克隆完后,就可以在根目录下找到主题名,启动
+cd ..
+hugo server -t XXX(主题名) --buildDrafts  
+  
+#访问端口1313
+</code></pre></li>
+</ul>
+<h3 id="win10">下来步骤同上win10上一样</h3>
+
+  
+  <h4><i class="fa-share-alt" aria-hidden="true"></i>&nbsp;Share!</h4>
+<ul class="share-buttons">
+	<li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%2590%25AD%25E5%25BB%25BA%25E4%25B8%25AA%25E4%25BA%25BA%25E5%258D%259A%25E5%25AE%25A2%25E7%25BD%2591%25E7%25AB%2599%2f" target="_blank" title="Share on Facebook"><i class="fa-facebook" aria-hidden="true"></i><span class="sr-only">Share on Facebook</span></a>
+	</li>&nbsp;&nbsp;&nbsp;
+	<li><a href="https://twitter.com/intent/tweet?source=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%2590%25AD%25E5%25BB%25BA%25E4%25B8%25AA%25E4%25BA%25BA%25E5%258D%259A%25E5%25AE%25A2%25E7%25BD%2591%25E7%25AB%2599%2f&via=HorribleGeek" target="_blank" title="Tweet"><i class="fa-twitter" aria-hidden="true"></i><span class="sr-only">Tweet</span></a>
+	</li>&nbsp;&nbsp;&nbsp;
+	<li><a href="https://plus.google.com/share?url=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%2590%25AD%25E5%25BB%25BA%25E4%25B8%25AA%25E4%25BA%25BA%25E5%258D%259A%25E5%25AE%25A2%25E7%25BD%2591%25E7%25AB%2599%2f" target="_blank" title="Share on Google+"><i class="fa-google-plus" aria-hidden="true"></i><span class="sr-only">Share on Google+</span></a>
+	</li>&nbsp;&nbsp;&nbsp;
+	<li><a href="http://www.tumblr.com/share?v=3&u=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%2590%25AD%25E5%25BB%25BA%25E4%25B8%25AA%25E4%25BA%25BA%25E5%258D%259A%25E5%25AE%25A2%25E7%25BD%2591%25E7%25AB%2599%2f" target="_blank" title="Post to Tumblr"><i class="fa-tumblr" aria-hidden="true"></i><span class="sr-only">Post to Tumblr</span></a>
+	</li>&nbsp;&nbsp;&nbsp;
+	<li><a href="http://pinterest.com/pin/create/button/?url=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%2590%25AD%25E5%25BB%25BA%25E4%25B8%25AA%25E4%25BA%25BA%25E5%258D%259A%25E5%25AE%25A2%25E7%25BD%2591%25E7%25AB%2599%2f" target="_blank" title="Pin it"><i class="fa-pinterest-p" aria-hidden="true"></i><span class="sr-only">Pin it</span></a>
+	</li>&nbsp;&nbsp;&nbsp;
+	<li><a href="http://www.reddit.com/submit?url=https%3a%2f%2fhyontheway.github.io%2fpost%2f%25E6%2590%25AD%25E5%25BB%25BA%25E4%25B8%25AA%25E4%25BA%25BA%25E5%258D%259A%25E5%25AE%25A2%25E7%25BD%2591%25E7%25AB%2599%2f" target="_blank" title="Submit to Reddit"><i class="fa-reddit-alien" aria-hidden="true"></i><span class="sr-only">Submit to Reddit</span></a>
+	</li>
+</ul>
+
+
+<style>
+	ul.share-buttons{
+	  list-style: none;
+	  padding: 0;
+	}
+
+	ul.share-buttons li{
+	  display: inline;
+	}
+
+	ul.share-buttons .sr-only{
+	  position: absolute;
+	  clip: rect(1px 1px 1px 1px);
+	  clip: rect(1px, 1px, 1px, 1px);
+	  padding: 0;
+	  border: 0;
+	  height: 1px;
+	  width: 1px;
+	  overflow: hidden;
+	}
+</style>
+
+
+  
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'HY';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="https://hyontheway.github.io/js/ui.js"></script>
+<script src="https://hyontheway.github.io/js/menus.js"></script>
+
+
+<script>
+  
+  if (window.location.hostname != "localhost") {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'Your Google Analytics tracking ID', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+
+
+<script src="https://hyontheway.github.io/js/math-code.js"></script>
+  <script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+
+
+</body>
+</html>
+
