@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>&amp;copy; 2016. All rights reserved.</copyright>
-    <lastBuildDate>Tue, 28 Jan 2020 18:54:04 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 28 Jan 2020 19:36:55 +0800</lastBuildDate>
     
 	<atom:link href="https://hyontheway.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>面经1</title>
+      <link>https://hyontheway.github.io/post/%E9%9D%A2%E7%BB%8F1/</link>
+      <pubDate>Tue, 28 Jan 2020 19:36:55 +0800</pubDate>
+      
+      <guid>https://hyontheway.github.io/post/%E9%9D%A2%E7%BB%8F1/</guid>
+      <description>1.MyBatis中当实体类中的属性名和字段名不一样,怎么办? 1.写SQL语句时起别名 2.在MyBatis的全局配置文件中开启驼峰命名(&amp;q</description>
+    </item>
     
     <item>
       <title>字节Java面经</title>
