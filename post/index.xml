@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>&amp;copy; 2016. All rights reserved.</copyright>
-    <lastBuildDate>Tue, 28 Jan 2020 18:29:01 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 28 Jan 2020 18:54:04 +0800</lastBuildDate>
     
 	<atom:link href="https://hyontheway.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>字节Java面经</title>
+      <link>https://hyontheway.github.io/post/%E5%AD%97%E8%8A%82java%E9%9D%A2%E7%BB%8F/</link>
+      <pubDate>Tue, 28 Jan 2020 18:54:04 +0800</pubDate>
+      
+      <guid>https://hyontheway.github.io/post/%E5%AD%97%E8%8A%82java%E9%9D%A2%E7%BB%8F/</guid>
+      <description>一面: 基础: 1.异步和同步IO? 2.数组和链表的区别? 3.双向链表的删除时间复杂度? 4.hashmap原理?扩容如何实现? 5.tcp和udp</description>
+    </item>
     
     <item>
       <title>正则表达</title>
