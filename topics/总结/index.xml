@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>总结 on HY&#39;s blog</title>
+    <link>https://hyontheway.github.io/topics/%E6%80%BB%E7%BB%93/</link>
+    <description>Recent content in 总结 on HY&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>&amp;copy; 2016. All rights reserved.</copyright>
+    <lastBuildDate>Tue, 28 Jan 2020 19:36:55 +0800</lastBuildDate>
+    
+	<atom:link href="https://hyontheway.github.io/topics/%E6%80%BB%E7%BB%93/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>面经1</title>
+      <link>https://hyontheway.github.io/post/%E9%9D%A2%E7%BB%8F1/</link>
+      <pubDate>Tue, 28 Jan 2020 19:36:55 +0800</pubDate>
+      
+      <guid>https://hyontheway.github.io/post/%E9%9D%A2%E7%BB%8F1/</guid>
+      <description>1.MyBatis中当实体类中的属性名和字段名不一样,怎么办? 1.写SQL语句时起别名 2.在MyBatis的全局配置文件中开启驼峰命名(&amp;q</description>
+    </item>
+    
+    <item>
+      <title>字节Java面经</title>
+      <link>https://hyontheway.github.io/post/%E5%AD%97%E8%8A%82java%E9%9D%A2%E7%BB%8F/</link>
+      <pubDate>Tue, 28 Jan 2020 18:54:04 +0800</pubDate>
+      
+      <guid>https://hyontheway.github.io/post/%E5%AD%97%E8%8A%82java%E9%9D%A2%E7%BB%8F/</guid>
+      <description>一面: 基础: 1.异步和同步IO? 2.数组和链表的区别? 3.双向链表的删除时间复杂度? 4.hashmap原理?扩容如何实现? 5.tcp和udp</description>
+    </item>
+    
+  </channel>
+</rss>
