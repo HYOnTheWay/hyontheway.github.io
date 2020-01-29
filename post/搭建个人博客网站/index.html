@@ -280,33 +280,89 @@ Please run &lsquo;choco -?&rsquo; or &lsquo;choco <!-- raw HTML omitted --> -?&r
 </li>
 </ul>
 <h4 id="2chocohugo">2.使用choco去安装hugo</h4>
-<pre><code>#在指定的盘安装hugo
-choco install hugo -confirm
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#960050;background-color:#1e0010">#</span>在指定的盘安装hugo
+choco install hugo <span style="color:#f92672">-</span>confirm
 
-#配置环境path
+<span style="color:#960050;background-color:#1e0010">#</span>配置环境path
 
-#cmd使用
+<span style="color:#960050;background-color:#1e0010">#</span>cmd使用
 hugo version
 cd hugo文件夹
 
-#创建一个新站点
-hugo new site blog文件夹名
+<span style="color:#960050;background-color:#1e0010">#</span>创建一个新站点
+hugo <span style="color:#66d9ef">new</span> site blog文件夹名
 
-#进入根目录下
-git clone .....................(克隆主题)官网(https://themes.gohugo.io/)
+<span style="color:#960050;background-color:#1e0010">#</span>进入根目录下
+git clone <span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">(</span>克隆主题<span style="color:#f92672">)</span>官网<span style="color:#f92672">(</span>https<span style="color:#f92672">:</span><span style="color:#75715e">//themes.gohugo.io/)
+</span><span style="color:#75715e"></span>
+<span style="color:#960050;background-color:#1e0010">#</span>克隆完后<span style="color:#f92672">,</span>就可以在根目录下找到主题名<span style="color:#f92672">,</span>启动
+cd <span style="color:#f92672">.</span><span style="color:#f92672">.</span>
+hugo server <span style="color:#f92672">-</span>t <span style="color:#a6e22e">XXX</span><span style="color:#f92672">(</span>主题名<span style="color:#f92672">)</span> <span style="color:#f92672">-</span><span style="color:#f92672">-</span>buildDrafts  
 
-#克隆完后,就可以在根目录下找到主题名,启动
-cd ..
-hugo server -t XXX(主题名) --buildDrafts  
-
-#访问端口1313
+<span style="color:#960050;background-color:#1e0010">#</span>访问端口1313
 localhost:1313
 
-#写博客
-hugo new post/XXX.md
+<span style="color:#960050;background-color:#1e0010">#</span>写博客
+hugo <span style="color:#66d9ef">new</span> post<span style="color:#f92672">/</span>XXX<span style="color:#f92672">.</span><span style="color:#a6e22e">md</span>
 
-#编辑XXX博客,OK
-</code></pre><h4 id="3github">3.将博客部署到github上</h4>
+<span style="color:#960050;background-color:#1e0010">#</span>编辑XXX博客<span style="color:#f92672">,</span>OK
+</code></pre></div><h4 id="3">3.主题操作</h4>
+<p>这里我用到的为这个主题:</p>
+<p>![](D:\hugo_0.60.1\my_blog\content\post\批注 2020-01-29 130315.png)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#960050;background-color:#1e0010">#</span>git克隆
+cd themes
+git clone https<span style="color:#f92672">:</span><span style="color:#75715e">//github.com/yoshiharuyamashita/blackburn.git
+</span><span style="color:#75715e"></span>
+<span style="color:#960050;background-color:#1e0010">#</span>克隆完后<span style="color:#f92672">,</span>就可以在根目录下找到主题名<span style="color:#f92672">,</span>启动
+cd <span style="color:#f92672">.</span><span style="color:#f92672">.</span>
+hugo server <span style="color:#f92672">-</span>t <span style="color:#a6e22e">XXX</span><span style="color:#f92672">(</span>主题名<span style="color:#f92672">)</span> <span style="color:#f92672">-</span><span style="color:#f92672">-</span>buildDrafts  
+
+<span style="color:#960050;background-color:#1e0010">#</span>访问端口1313
+localhost:1313
+
+<span style="color:#960050;background-color:#1e0010">#</span>写博客
+hugo <span style="color:#66d9ef">new</span> post<span style="color:#f92672">/</span>XXX<span style="color:#f92672">.</span><span style="color:#a6e22e">md</span>
+
+<span style="color:#960050;background-color:#1e0010">#</span>编辑XXX博客<span style="color:#f92672">,</span>OK
+</code></pre></div><h4 id="4xxxmd">4.编写xxx.md</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">-</span><span style="color:#f92672">-</span><span style="color:#f92672">-</span>
+title: <span style="color:#e6db74">&#34;搭建个人博客网站&#34;</span>
+date: 2020<span style="color:#f92672">-</span>01<span style="color:#f92672">-</span>28T17<span style="color:#f92672">:</span>45<span style="color:#f92672">:</span>15<span style="color:#f92672">+</span>08<span style="color:#f92672">:</span>00
+draft: <span style="color:#66d9ef">false</span>
+tags: <span style="color:#f92672">[</span>网站搭建<span style="color:#f92672">]</span>
+topics: <span style="color:#f92672">[</span>工具搭建<span style="color:#f92672">]</span>
+<span style="color:#f92672">-</span><span style="color:#f92672">-</span><span style="color:#f92672">-</span>
+draft: 是否为草稿  <span style="color:#66d9ef">false</span><span style="color:#f92672">:</span>不是  <span style="color:#66d9ef">true</span><span style="color:#f92672">:</span>是 <span style="color:#f92672">(</span>创建出来时默认为true<span style="color:#f92672">)</span>  
+tags: 标签    <span style="color:#f92672">[</span>XXX<span style="color:#f92672">,</span>XXXX<span style="color:#f92672">]</span>  为集合形式
+topics: 主题   和tags同样为集合
+
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * 1.编写完成就会有标签和主题显示,但是点击不会跳转 
+</span><span style="color:#75715e"> * 2.我们要找到themes\blackburn\layouts\post   下的single.html 添加如下
+</span><span style="color:#75715e"> */</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!--</span><span style="color:#75715e"> single.html 添加的东西如下</span><span style="color:#75715e">--&gt;</span>
+{{ partial &#34;header.html&#34; . }}
+
+&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;header&#34;</span>&gt;
+  &lt;<span style="color:#f92672">h1</span>&gt;{{ .Title }}&lt;/<span style="color:#f92672">h1</span>&gt;
+  &lt;<span style="color:#f92672">h2</span>&gt;{{ .Description }}&lt;/<span style="color:#f92672">h2</span>&gt;
+&lt;/<span style="color:#f92672">div</span>&gt;
+&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;content&#34;</span>&gt;
+
+  {{ partial &#34;post_meta.html&#34; . }}
+
+  {{ .Content }}
+  
+  {{ partial &#34;prev_next_post.html&#34; . }}
+
+  {{ partial &#34;disqus.html&#34; . }}
+  {{ .Params.tags }}    <span style="color:#75715e">&lt;!--</span><span style="color:#75715e"> 1.我们添加的tags标签跳转 </span><span style="color:#75715e">--&gt;</span>
+  {{ .Params.topics }}	<span style="color:#75715e">&lt;!--</span><span style="color:#75715e"> 2.我们添加的topics主题跳转 </span><span style="color:#75715e">--&gt;</span>
+
+&lt;/<span style="color:#f92672">div</span>&gt;
+
+{{ partial &#34;footer.html&#34; . }}
+</code></pre></div><h4 id="3github">3.将博客部署到github上</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#960050;background-color:#1e0010">#</span>将hugo主题和github联系
 hugo <span style="color:#f92672">-</span><span style="color:#f92672">-</span>theme<span style="color:#f92672">=</span>XXX<span style="color:#f92672">(</span>主题名<span style="color:#f92672">)</span> <span style="color:#f92672">-</span><span style="color:#f92672">-</span>baseUrl<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://onthewayofyourself.github.io/&#34;</span> <span style="color:#f92672">-</span><span style="color:#f92672">-</span>buildDrafts
 
@@ -327,7 +383,8 @@ git push <span style="color:#f92672">-</span>u origin master
 <span style="color:#960050;background-color:#1e0010">#</span>访问自己博客<span style="color:#f92672">,</span>直接输入即可
 XXXXX<span style="color:#f92672">.</span><span style="color:#a6e22e">github</span><span style="color:#f92672">.</span><span style="color:#a6e22e">io</span>
 </code></pre></div><h4 id="4">4.发布博客</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">hugo <span style="color:#66d9ef">new</span> post<span style="color:#f92672">/</span>newBlog<span style="color:#f92672">.</span><span style="color:#a6e22e">md</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#960050;background-color:#1e0010">#</span>这里用于以后每次更新操作
+hugo <span style="color:#66d9ef">new</span> post<span style="color:#f92672">/</span>newBlog<span style="color:#f92672">.</span><span style="color:#a6e22e">md</span>
 <span style="color:#960050;background-color:#1e0010">–</span>生成静态页面
 hugo <span style="color:#f92672">-</span><span style="color:#f92672">-</span>theme<span style="color:#f92672">=</span>blackburn <span style="color:#f92672">-</span><span style="color:#f92672">-</span>buildDrafts <span style="color:#f92672">-</span><span style="color:#f92672">-</span>baseUrl<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://hyontheway.github.io/&#34;</span>
 <span style="color:#960050;background-color:#1e0010">—</span>发布
