@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.60.1" />
+
+  <title>分析数据库锁 &middot; HY&#39;s blog</title>
+
+    
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://hyontheway.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+    
+        <link rel="stylesheet" href="https://hyontheway.github.io/css/my.css">
+    
+  
+  
+    
+        <script src="https://hyontheway.github.io/js/my.js"></script>
+    
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://hyontheway.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/HYOnTheWay" rel="me" target="_blank"><i class="fab fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>分析数据库锁</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>11 Feb 2020, 19:36</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://hyontheway.github.io/topics/%E5%9F%BA%E7%A1%80">基础</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-topic" href="https://hyontheway.github.io/topics/%E6%80%BB%E7%BB%93">总结</a>
+    
+  </div>
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://hyontheway.github.io/tags/mysql%E6%95%B0%E6%8D%AE%E5%BA%93">mysql数据库</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="https://hyontheway.github.io/tags/java%E5%9F%BA%E7%A1%80">java基础</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <p>[TOC]</p>
+<h2 id="1">1.宏观</h2>
+<p>锁是计算机协调多个进程或线程并发访问某一资源的机制</p>
+<h3 id="11">1.数据库锁</h3>
+<ul>
+<li>粒度小,方便用于集群环境</li>
+</ul>
+<h3 id="2">2.代码锁</h3>
+<ul>
+<li>粒度大,需要封装</li>
+</ul>
+<h2 id="21">2.微观(操作粒度)</h2>
+<h3 id="12">1.分类(种类)</h3>
+<h4 id="1--">1.行锁 &amp; 表锁</h4>
+<p>只有明确指定明确指定主键才会执行行锁,否则执行表锁</p>
+<ul>
+<li>
+<p>无锁</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">user</span> <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">update</span>;
+</code></pre></div><p>id是从1开始自增,这里为-1所以这个主键是不存在的</p>
+</li>
+<li>
+<p>行锁(偏写)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">user</span> <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">update</span>;
+<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">user</span> <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">and</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">KKK</span><span style="color:#e6db74">&#39;</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">update</span>;
+</code></pre></div><p>这些都会执行行锁</p>
+</li>
+<li>
+<p>表锁(偏读)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">主</span><span style="color:#960050;background-color:#1e0010">键</span><span style="color:#960050;background-color:#1e0010">不</span><span style="color:#960050;background-color:#1e0010">明</span><span style="color:#960050;background-color:#1e0010">确</span>
+<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">where</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">kk</span><span style="color:#e6db74">&#39;</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">update</span>;
+<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">where</span> id <span style="color:#f92672">&lt;</span><span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">3</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">update</span>;
+</code></pre></div></li>
+</ul>
+<h4 id="22">2.表锁分析</h4>
+<p>**1.特点:**偏向MyISAM存储引擎,开销小,加锁快;无死锁;锁粒度大,发生锁冲突的概率最高,并发度最低.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 加锁
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">lock</span> <span style="color:#66d9ef">table</span> mylock <span style="color:#66d9ef">read</span>,book <span style="color:#66d9ef">write</span>;
+<span style="color:#75715e">-- 解锁
+</span><span style="color:#75715e"></span>unlock tables;
+</code></pre></div><ul>
+<li>
+<p>读锁</p>
+<table>
+<thead>
+<tr>
+<th align="center">session_1</th>
+<th align="center">session_2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">session1给表mylock加读锁</td>
+<td align="center">session2链接终端</td>
+</tr>
+<tr>
+<td align="center">session1可以查询该表记录</td>
+<td align="center">session2也可以查询该表记录</td>
+</tr>
+<tr>
+<td align="center">session1不能查询其它没有加锁的表</td>
+<td align="center">session2可以查询或更新未加锁的表</td>
+</tr>
+<tr>
+<td align="center">session1插入或更新mylock都会报错,最后释放锁</td>
+<td align="center">session2插入或更新mylock会<strong>一直等待</strong>获取锁,1释放完2获取锁更新</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>写锁:</p>
+<table>
+<thead>
+<tr>
+<th align="center">session_1</th>
+<th align="center">session_2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">获得表mylock的write锁定</td>
+<td align="center">待session1开启写锁,session2连接终端</td>
+</tr>
+<tr>
+<td align="center">session1对锁定表mylock更新读取都可以</td>
+<td align="center">session2对锁定表查询被阻塞,需要等待锁释放</td>
+</tr>
+<tr>
+<td align="center">释放锁</td>
+<td align="center">session2获取锁,进行查询</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p><strong>2.总结:读锁会阻塞写,但是不阻塞读,而写锁则是把读和写全阻塞.</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 看哪些表被锁
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">show</span> <span style="color:#66d9ef">open</span> tables;
+<span style="color:#75715e">-- 如何分析表锁定
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">show</span> status <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">table%</span><span style="color:#e6db74">&#39;</span>;
+</code></pre></div><p><img src="https://img-blog.csdnimg.cn/20200211193846311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzMwODQwNg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li>Table_locks_immediate:产生表级锁定的次数,表示可以立即获取锁的查询次数.,每次获取锁值加1</li>
+<li>Table_locks_waited:出现表级锁定争用而发生等待的次数(不能立即获取锁的次数,每等待一次锁值加),此值高则说明存在着较严重的表级锁争用情况</li>
+</ul>
+<p><strong>MyISAM的读写调度是优先,这也是MyISAM不适合做写为主表的引擎,因为写锁后,其他线程不能做任何操作,大量的更新会使查询很难得到锁,从而造成永久阻塞.</strong></p>
+<h4 id="4">4.行锁分析</h4>
+<p>**1.特点:**偏向InnoDB存储引擎,开销大,加锁慢;会出现死锁;锁粒度小,发生锁冲突的概率最低,并发也是最高.</p>
+<p>InnoDB与MyISAM的最大不同有两点:一是事务;二是行级锁;</p>
+<table>
+<thead>
+<tr>
+<th align="center">session_1</th>
+<th align="center">session_2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">set autocommit = 0</td>
+<td align="center">set autocommmit = 0</td>
+</tr>
+<tr>
+<td align="center">更新但不提交,没有手写commit</td>
+<td align="center">session_2更新同一条数据,被阻塞</td>
+</tr>
+<tr>
+<td align="center">commit; 提交</td>
+<td align="center">解除阻塞,正常更新</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">commit; 提交</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2.索引失效导致行锁升级为表锁,别人无法更新.</strong></p>
+<p><strong>3.间隙锁</strong></p>
+<p>1.间隙锁带来的插入问题</p>
+<table>
+<thead>
+<tr>
+<th align="center">session_1</th>
+<th align="center">session_2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">更新表中id&gt;1和id&lt;6,但是id=2已删除,更新成功</td>
+<td align="center">新增id=2的值,阻塞产生,暂时不能插入</td>
+</tr>
+<tr>
+<td align="center">commit; 提交</td>
+<td align="center">阻塞解除,完成插入</td>
+</tr>
+</tbody>
+</table>
+<p>2.什么是间隙锁?</p>
+<blockquote>
+<p>当我们用范围查询条件而不是相等条件检索数据,并请求共享或者排他锁,InnoDB会给符合条件的已有数据记录的索引项加锁;对于键值在条件范围内但并不存在的记录,叫做&quot;间隙(GAP)&quot;;</p>
+<p>InnoDB也会对这个&quot;间隙&quot;加锁,这种锁机制就是所谓的间隙锁.</p>
+</blockquote>
+<p><strong>4.如何锁定一行?</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">begin;
+<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> table_names <span style="color:#66d9ef">where</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">update</span>;
+commit;
+</code></pre></div><blockquote>
+<p>锁定一行后,其他操作会被阻塞,直到锁定行的会话提交commit.</p>
+</blockquote>
+<p><strong>InnoDB存储引擎由于实现了行级锁定,虽然在锁定方面所带来的性能损耗可能比表级锁定要更高一些,但是整体并发处理能力方面要远远优于MyISAM的表级锁定的.当系统并发量较高的时候,InnoDB的整体性能和MyISAM相比就会有比较明显的优势了.</strong></p>
+<p><strong>但是使用不当,会行锁边表锁,让整体性能更弱.</strong></p>
+<p><strong>5.分析行锁定</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#66d9ef">show</span> status <span style="color:#66d9ef">like</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">XXX%</span><span style="color:#e6db74">&#39;</span>;
+</code></pre></div><p>参数:</p>
+<blockquote>
+<p>Innodb_row_lock_current_waits: 当前正在等待锁定数量(<strong>总等代数</strong>);</p>
+<p>Innodb_row_lock_time: 从系统启动到现在锁定<strong>总时间长度</strong>;</p>
+<p>Innodb_row_lock_time_avg: 每次等待所花<strong>平均时间</strong>;</p>
+<p>Innodb_row_lock_time_max: 从系统启动到现在等待最常的一次所花时间;</p>
+<p>Innodb_row_lock_waits: 系统启动到现在总共等待的次数;</p>
+</blockquote>
+<p><strong>6.行锁优化</strong></p>
+<blockquote>
+<p>1.尽可能让所有数据检索都通过索引来完成,避免五索引行锁升级为表锁.(注意varchar类型,的索引问题)</p>
+<p>2.合理设计索引,尽量缩小锁的范围(如范围查询要小心间隙锁)</p>
+<p>3.尽可能较少检索条件,避免间隙锁</p>
+<p>4.尽量控制事务大小,减少锁定资源和时间长度</p>
+<p>5.尽可能低级事务隔离</p>
+</blockquote>
+<h3 id="23">2.锁算法(机制)</h3>
+<h4 id="13">1.行锁算法</h4>
+<ul>
+<li>
+<p>Record Lock (普通行锁)</p>
+<ul>
+<li>键值在条件范围内(比如主键id的范围)</li>
+<li>记录存在</li>
+</ul>
+</li>
+<li>
+<p>Gap Lock (间隙锁)</p>
+<ul>
+<li>键值不存在条件范围内,叫做&quot;间隙&rdquo;(GAP),引擎就会对这个&quot;间隙&quot;进行加锁,这种机制就叫做GAP机制</li>
+</ul>
+</li>
+<li>
+<p>Next-Key Lock (行 &amp; 间隙)</p>
+<ul>
+<li>在键值范围条件内,同时键值又不存在条件范围内.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span>id只有1<span style="color:#f92672">-</span><span style="color:#ae81ff">50</span>
+<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">user</span> id <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">49</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">update</span>;
+</code></pre></div></li>
+</ul>
+<h4 id="24">2.表锁算法</h4>
+<ul>
+<li>
+<p>意向锁(升级机制)</p>
+<ul>
+<li>当一个事务带着表锁去访问一个被加了行锁的资源.那么,这个行锁就会升级成为意向锁,将表锁住.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">事</span><span style="color:#960050;background-color:#1e0010">务</span>A
+<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">user</span> <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">update</span>;
+<span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">事</span><span style="color:#960050;background-color:#1e0010">务</span>B
+<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">user</span> <span style="color:#66d9ef">where</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">kk</span><span style="color:#e6db74">&#39;</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">update</span>;
+</code></pre></div><p>事务A 是加了行锁的,事务B如果区访问name = &lsquo;kk&rsquo;,他的id为10,那么就满足了意向锁的条件</p>
+</li>
+<li>
+<p>自增锁</p>
+<ul>
+<li>事务插入自增类型的列时,获取自增锁</li>
+</ul>
+<blockquote>
+<p>如果一个事务正往表中插入自增记录,其他事务必须等待.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="3">3.实现</h3>
+<h4 id="1--1">1.共享锁 &amp; 排它锁</h4>
+<blockquote>
+<p>行锁和表锁其实是粒度的概念,共享锁和排它锁是具体的实现</p>
+</blockquote>
+<ul>
+<li>
+<p>共享锁(s)</p>
+<ul>
+<li>允许一个事务去读一行,阻止其他事务去获取该行的排它锁</li>
+</ul>
+</li>
+<li>
+<p>排它锁(x):写锁</p>
+<ul>
+<li>允许持有排它锁的事务读写数据,阻止其他事务获取该资源的共享锁和排它锁</li>
+<li>不能获取任何锁,不代表不能读</li>
+</ul>
+</li>
+<li>
+<p>注意</p>
+<ul>
+<li>
+<p>某个事务获取数据的排它锁,其他书屋不能获取该数据的任何锁,并不能代表其他事务不能无锁读取该数据</p>
+<ul>
+<li>无锁</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">不</span><span style="color:#960050;background-color:#1e0010">加</span><span style="color:#960050;background-color:#1e0010">任</span><span style="color:#960050;background-color:#1e0010">何</span><span style="color:#960050;background-color:#1e0010">修</span><span style="color:#960050;background-color:#1e0010">饰</span><span style="color:#960050;background-color:#1e0010">就</span><span style="color:#960050;background-color:#1e0010">是</span><span style="color:#960050;background-color:#1e0010">无</span><span style="color:#960050;background-color:#1e0010">锁</span>
+<span style="color:#66d9ef">select</span> ... <span style="color:#66d9ef">from</span> ....
+</code></pre></div><ul>
+<li>共享锁</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> .... <span style="color:#66d9ef">lock</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">share</span> <span style="color:#66d9ef">mode</span>
+</code></pre></div><blockquote>
+<p>MySQL 8.0以上,for share 代替了lock in share mode,仍然支持lock in share mode ;但是,nowait,skip lock,配合自旋锁,可以高效的实现一个等待队列.</p>
+</blockquote>
+<ul>
+<li>排它锁</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">update</span>...
+<span style="color:#66d9ef">delete</span>...
+<span style="color:#66d9ef">insert</span>...
+<span style="color:#66d9ef">select</span>...<span style="color:#66d9ef">for</span> <span style="color:#66d9ef">update</span>
+</code></pre></div></li>
+</ul>
+</li>
+</ul>
+<h4 id="2--">2.乐观锁 &amp; 悲观锁</h4>
+<blockquote>
+<p>不管是什么锁都需要失败重试</p>
+</blockquote>
+<ul>
+<li>
+<p>乐观锁:一般通过版本号进行更新操作</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">update</span> <span style="color:#66d9ef">user</span> <span style="color:#66d9ef">set</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ww</span><span style="color:#e6db74">&#39;</span> <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">and</span> <span style="color:#66d9ef">version</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</code></pre></div></li>
+<li>
+<p>悲观锁:共享锁和排它锁其实是悲观锁的一个实现</p>
+</li>
+</ul>
+
+  
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://hyontheway.github.io/post/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%90%86%E8%A7%A3/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://hyontheway.github.io/post/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%90%86%E8%A7%A3/">分库分表理解</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'HY';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  [mysql数据库 java基础]
+  [基础 总结]
+
+</div>
+
+</div>
+</div>
+<script src="https://hyontheway.github.io/js/ui.js"></script>
+<script src="https://hyontheway.github.io/js/menus.js"></script>
+
+
+<script>
+  
+  if (window.location.hostname != "localhost") {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'Your Google Analytics tracking ID', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
+
