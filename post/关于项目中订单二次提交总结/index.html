@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.60.1" />
+
+  <title>关于项目中订单二次提交总结,md &middot; HY&#39;s blog</title>
+
+    
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://hyontheway.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+    
+        <link rel="stylesheet" href="https://hyontheway.github.io/css/my.css">
+    
+  
+  
+    
+        <script src="https://hyontheway.github.io/js/my.js"></script>
+    
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://hyontheway.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/HYOnTheWay" rel="me" target="_blank"><i class="fab fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>关于项目中订单二次提交总结,md</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>15 Feb 2020, 15:28</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://hyontheway.github.io/topics/%E6%80%BB%E7%BB%93">总结</a>
+    
+  </div>
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://hyontheway.github.io/tags/%E9%A1%B9%E7%9B%AE">项目</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <h2 id="heading">订单重复提交问题</h2>
+<h3 id="1">1.原因:</h3>
+<p>1.网络延迟的情况下让用户有时间点击多次提交按钮导致表单重复提交.</p>
+<p>2.表单提交后用户点击浏览器的刷新导致表单重复提交</p>
+<p>3.用户提交表单后,点击浏览器[后退]按钮回退到表单页面后进行提交</p>
+<h3 id="2">2.三种方法</h3>
+<h4 id="1javascripct">1.用JavaScripct的方式在客户端处理.</h4>
+<p>设置一个表示只让他提交一次,用于针对第一种原因,多次点击按钮提交.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">isCommitted</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;<span style="color:#75715e">//表单是否已经提交标识，默认为false
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">dosubmit</span>(){
+   <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">isCommitted</span><span style="color:#f92672">==</span><span style="color:#66d9ef">false</span>){
+       <span style="color:#a6e22e">isCommitted</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;<span style="color:#75715e">//提交表单后，将表单是否已经提交标识设置为true
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>;<span style="color:#75715e">//返回true让表单正常提交
+</span><span style="color:#75715e"></span>   }<span style="color:#66d9ef">else</span>{
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;<span style="color:#75715e">//返回false那么表单将不提交
+</span><span style="color:#75715e"></span>    }
+}
+</code></pre></div><h4 id="2session">2.利用session防止表单重复提交</h4>
+<p>步骤:</p>
+<p>1.客户端申请token</p>
+<p>2.服务器端生成token，并存放在session中，同时将token发送到客户端</p>
+<p>3.客户端存储token，在请求提交时，同时发送token信息</p>
+<p>4.服务器端统一拦截同一个用户的所有请求，验证当前请求是否需要被验证（不是所有请求都验证重复提交）</p>
+<p>5.验证session中token是否和用户请求中的token一致，如果一致则放行</p>
+<p>6.session清除会话中的token，为下一次的token生成作准备</p>
+<p>7.并发重复请求到来，验证token和请求token不一致，请求被拒绝</p>
+<p>决绝策略:</p>
+<ul>
+<li>
+<p>存储session域中的Token(令牌)与表单提交的Token(令牌不同).</p>
+</li>
+<li>
+<p>当前用户的Session中不存在Token(令牌)</p>
+</li>
+<li>
+<p>用户提交的表单数据没有Token(令牌)</p>
+</li>
+</ul>
+<h4 id="3redis-incrde-">3.使用Redis incrde 原子性递增</h4>
+<p>我们可以使用Redis incrde 原子性递增，来解决这种高并发的秒杀或者分布式序列号生成等场景。鉴于本场景我们</p>
+<p>只用他来做计数实现间隔时间内只接收一次请求。</p>
+<p>实现逻辑：</p>
+<p>在提交订单之后使用Redis的incr设置一个递增的KEY(根据自己的需要设定但是要保证每一个人的唯</p>
+<p>一)，来判断该KEY的数值，如果等于1说明这是第一次请求，发送短信记录日志，并设置有效期，如果不等于的</p>
+<p>话说明是间隔时间内多次请求，就提示请求频繁，稍后重试。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">String orderNum<span style="color:#f92672">=</span>memberId<span style="color:#f92672">+</span>productId<span style="color:#f92672">;</span>
+<span style="color:#66d9ef">long</span> count <span style="color:#f92672">=</span> redisTemplate<span style="color:#f92672">.</span><span style="color:#a6e22e">opsForValue</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">increment</span><span style="color:#f92672">(</span>orderNum<span style="color:#f92672">,</span> 1<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>count <span style="color:#f92672">=</span><span style="color:#f92672">=</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+<span style="color:#75715e">//设置有效期2秒
+</span><span style="color:#75715e"></span>  redisTemplate<span style="color:#f92672">.</span><span style="color:#a6e22e">expire</span><span style="color:#f92672">(</span>orderNum<span style="color:#f92672">,</span> 2<span style="color:#f92672">,</span> TimeUnit<span style="color:#f92672">.</span><span style="color:#a6e22e">SECONDS</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>count <span style="color:#f92672">&gt;</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+   resultMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;retCode&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;500&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>     
+   resultMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;retMsg&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;请不要重复提交订单&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+   <span style="color:#66d9ef">return</span> resultMap<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div>
+  
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://hyontheway.github.io/post/%E8%AE%A2%E5%8D%95%E4%B8%AD%E7%9A%84%E5%87%8F%E5%BA%93%E5%AD%98%E6%93%8D%E4%BD%9C%E8%A7%A3%E6%9E%90/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://hyontheway.github.io/post/%E8%AE%A2%E5%8D%95%E4%B8%AD%E7%9A%84%E5%87%8F%E5%BA%93%E5%AD%98%E6%93%8D%E4%BD%9C%E8%A7%A3%E6%9E%90/">订单中的减库存操作解析</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'HY';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  [项目]
+  [总结]
+
+</div>
+
+</div>
+</div>
+<script src="https://hyontheway.github.io/js/ui.js"></script>
+<script src="https://hyontheway.github.io/js/menus.js"></script>
+
+
+<script>
+  
+  if (window.location.hostname != "localhost") {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'Your Google Analytics tracking ID', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
+
