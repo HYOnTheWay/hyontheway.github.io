@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>&amp;copy; 2016. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 15 Feb 2020 15:28:52 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 15 Feb 2020 17:23:56 +0800</lastBuildDate>
     
 	<atom:link href="https://hyontheway.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>支付中常见幂等设计</title>
+      <link>https://hyontheway.github.io/post/%E6%94%AF%E4%BB%98%E4%B8%AD%E5%B8%B8%E8%A7%81%E5%B9%82%E7%AD%89%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Sat, 15 Feb 2020 17:23:56 +0800</pubDate>
+      
+      <guid>https://hyontheway.github.io/post/%E6%94%AF%E4%BB%98%E4%B8%AD%E5%B8%B8%E8%A7%81%E5%B9%82%E7%AD%89%E8%AE%BE%E8%AE%A1/</guid>
+      <description>交易系统中的幂等设计 在一个典型的订单交易系统中，防重和幂等设计是重要而又非常基本的概念。 1.幂等含义: 只要调用接口成功，外部对接口的多次调用</description>
+    </item>
     
     <item>
       <title>关于项目中订单二次提交总结,md</title>

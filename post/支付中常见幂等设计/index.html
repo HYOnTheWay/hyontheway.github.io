@@ -7,7 +7,7 @@
   <meta name="description" content="">
   <meta name="generator" content="Hugo 0.60.1" />
 
-  <title>Posts &middot; HY&#39;s blog</title>
+  <title>支付中常见幂等设计 &middot; HY&#39;s blog</title>
 
     
 
@@ -41,9 +41,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
  
-  
-  <link rel="alternate" type="application/rss+xml" title="HY&#39;s blog"
-    href='https://hyontheway.github.io/post/index.xml' />
   
 
   
@@ -118,11 +115,6 @@
   <div class="pure-menu social">
   <ul class="pure-menu-list">
 
-    
-    <li class="pure-menu-item">
-      <a class="pure-menu-link" href='https://hyontheway.github.io/post/index.xml'><i
-          class="fas fa-rss"></i>RSS</a>
-    </li>
     
 
     
@@ -221,45 +213,119 @@
 
 
 <div class="header">
-  <h1>Posts</h1>
+  <h1>支付中常见幂等设计</h1>
+  <h2></h2>
 </div>
 <div class="content">
-  
-  <h2>2020</h2>
-  <ul>
-  
-    <li><time>15 Feb 2020, 17:23</time> - <a href="https://hyontheway.github.io/post/%E6%94%AF%E4%BB%98%E4%B8%AD%E5%B8%B8%E8%A7%81%E5%B9%82%E7%AD%89%E8%AE%BE%E8%AE%A1/">支付中常见幂等设计</a></li>
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>15 Feb 2020, 17:23</time>
+  </div>
 
   
-    <li><time>15 Feb 2020, 15:28</time> - <a href="https://hyontheway.github.io/post/%E5%85%B3%E4%BA%8E%E9%A1%B9%E7%9B%AE%E4%B8%AD%E8%AE%A2%E5%8D%95%E4%BA%8C%E6%AC%A1%E6%8F%90%E4%BA%A4%E6%80%BB%E7%BB%93/">关于项目中订单二次提交总结,md</a></li>
 
   
-    <li><time>14 Feb 2020, 16:00</time> - <a href="https://hyontheway.github.io/post/%E8%AE%A2%E5%8D%95%E4%B8%AD%E7%9A%84%E5%87%8F%E5%BA%93%E5%AD%98%E6%93%8D%E4%BD%9C%E8%A7%A3%E6%9E%90/">订单中的减库存操作解析</a></li>
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://hyontheway.github.io/topics/%E6%80%BB%E7%BB%93">总结</a>
+    
+  </div>
+  
+  
 
   
-    <li><time>11 Feb 2020, 19:36</time> - <a href="https://hyontheway.github.io/post/%E5%88%86%E6%9E%90%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/">分析数据库锁</a></li>
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://hyontheway.github.io/tags/%E9%A1%B9%E7%9B%AE">项目</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <h2 id="heading">交易系统中的幂等设计</h2>
+<p>在一个典型的订单交易系统中，防重和幂等设计是重要而又非常基本的概念。</p>
+<h4 id="1">1.幂等含义:</h4>
+<p>只要调用接口成功，外部对接口的多次调用得到的结果是相同的。即执行多次和一次的效果是一样的。</p>
+<h4 id="2">2.常见的幂等实现方案:</h4>
+<p>**1.**最简单的，需要通过唯一的业务单号来保证幂等。也就是说相同的业务单号，认为是同一笔业务。使用这个唯一</p>
+<p>的业务单号来确保，后面多次的相同的业务单号的处理逻辑和执行效果是一致的。以支付为例，在不考虑并发的情</p>
+<p>况下，实现幂等很简单：①先查询一下订单是否已经支付过，②如果已经支付过，则返回支付成功；如果没有支</p>
+<p>付，进行支付流程，修改订单状态为‘已支付’。</p>
+<p><strong>缺点:</strong></p>
+<p>上述的保证幂等方案是分成两步的，第②步依赖第①步的查询结果，无法保证原子性的。在高并发下就会出现下面</p>
+<p>的情况：第二次请求在第一次请求第②步订单状态还没有修改为‘已支付状态’的情况下到来。既然得出了这个结</p>
+<p>论，余下的问题也就变得简单：把查询和变更状态操作加锁，将并行操作改为串行操作。</p>
+<p>**2 .**在某些场景，想提供无锁的高并发幂等，那么你可以选择为业务单号加上唯一的索引或者组合索引，在并发的</p>
+<p>场景中，只有第一笔插入的交易请求能够成功，后续的请求哪怕是慢1ms或者更短时间，都会触发数据库的唯一索</p>
+<p>引异常而失败，那么你可以捕获这个异常。</p>
+<p>**3.**又或者想把幂等放在服务的最前端，减少实际服务处理的资源浪费，在请求一到达时就提前去重，不让它有执行</p>
+<p>的机会，那么可以考虑引入一个redis或类似的组件，将业务请求单号缓存在这个分布式锁的组件内。那么，每当</p>
+<p>订单发起交易请求，交易系统会去Redis缓存中查询是否存在该订单号的Key，如果不存在，则向Redis增加Key为</p>
+<p>订单号。查询订单是否已经执行，如果没有则转发到交易系统，执行完成后删除该订单号的Key。当然，Redis是</p>
+<p>提供分布式节点下的原子事务操作的。</p>
+<p>这是几种常见的幂等方案!</p>
 
   
-    <li><time>06 Feb 2020, 12:28</time> - <a href="https://hyontheway.github.io/post/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%90%86%E8%A7%A3/">分库分表理解</a></li>
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://hyontheway.github.io/post/%E5%85%B3%E4%BA%8E%E9%A1%B9%E7%9B%AE%E4%B8%AD%E8%AE%A2%E5%8D%95%E4%BA%8C%E6%AC%A1%E6%8F%90%E4%BA%A4%E6%80%BB%E7%BB%93/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://hyontheway.github.io/post/%E5%85%B3%E4%BA%8E%E9%A1%B9%E7%9B%AE%E4%B8%AD%E8%AE%A2%E5%8D%95%E4%BA%8C%E6%AC%A1%E6%8F%90%E4%BA%A4%E6%80%BB%E7%BB%93/">关于项目中订单二次提交总结,md</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
 
   
-    <li><time>01 Feb 2020, 14:22</time> - <a href="https://hyontheway.github.io/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-introduction/">动态规划 Introduction</a></li>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
 
-  
-    <li><time>28 Jan 2020, 19:36</time> - <a href="https://hyontheway.github.io/post/%E9%9D%A2%E7%BB%8F1/">面经1</a></li>
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
 
-  
-    <li><time>28 Jan 2020, 18:54</time> - <a href="https://hyontheway.github.io/post/%E5%AD%97%E8%8A%82java%E9%9D%A2%E7%BB%8F/">字节Java面经</a></li>
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'HY';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
-  
-    <li><time>28 Jan 2020, 18:29</time> - <a href="https://hyontheway.github.io/post/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE/">正则表达</a></li>
+  [项目]
+  [总结]
 
-  
-    <li><time>28 Jan 2020, 17:45</time> - <a href="https://hyontheway.github.io/post/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/">搭建个人博客网站</a></li>
-
-  
-  </ul>
-  
 </div>
 
 </div>
