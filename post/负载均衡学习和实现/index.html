@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.60.1" />
+
+  <title>负载均衡学习和实现 &middot; HY&#39;s blog</title>
+
+    
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://hyontheway.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://hyontheway.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+    
+        <link rel="stylesheet" href="https://hyontheway.github.io/css/my.css">
+    
+  
+  
+    
+        <script src="https://hyontheway.github.io/js/my.js"></script>
+    
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://hyontheway.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://hyontheway.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/HYOnTheWay" rel="me" target="_blank"><i class="fab fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>负载均衡学习和实现</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>24 Feb 2020, 11:16</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://hyontheway.github.io/topics/%E6%80%BB%E7%BB%93">总结</a>
+    
+  </div>
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://hyontheway.github.io/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1">负载均衡</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <h2 id="heading">一.负载均衡介绍</h2>
+<h3 id="1">1.什么是负载均衡?</h3>
+<p>用户-&gt;负载均衡平衡器-&gt;多台服务器(一个集群下)   负载均衡就是负载均衡器中实现的算法或者硬件设施.同时解决大量并发访问服务器问题.</p>
+<h3 id="2">2.负载均衡的方式?</h3>
+<p>软件负载均衡:Nginx.LVS,HAProxy</p>
+<p>硬件负载均衡:Arrays,F5</p>
+<h3 id="3">3.负载均衡算法</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">	<span style="color:#75715e">//正常分配
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> List<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> LIST <span style="color:#f92672">=</span> Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span>
+            <span style="color:#e6db74">&#34;192.168.0.1&#34;</span><span style="color:#f92672">,</span>
+            <span style="color:#e6db74">&#34;192.168.0.2&#34;</span><span style="color:#f92672">,</span>
+            <span style="color:#e6db74">&#34;192.168.0.3&#34;</span><span style="color:#f92672">,</span>
+            <span style="color:#e6db74">&#34;192.168.0.4&#34;</span><span style="color:#f92672">,</span>
+            <span style="color:#e6db74">&#34;192.168.0.5&#34;</span><span style="color:#f92672">,</span>
+            <span style="color:#e6db74">&#34;192.168.0.6&#34;</span><span style="color:#f92672">,</span>
+            <span style="color:#e6db74">&#34;192.168.0.7&#34;</span><span style="color:#f92672">,</span>
+            <span style="color:#e6db74">&#34;192.168.0.8&#34;</span><span style="color:#f92672">,</span>
+            <span style="color:#e6db74">&#34;192.168.0.9&#34;</span><span style="color:#f92672">,</span>
+            <span style="color:#e6db74">&#34;192.168.0.10&#34;</span>  <span style="color:#75715e">//这一台性能高
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+	<span style="color:#75715e">//考虑权重
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span>Integer<span style="color:#f92672">&gt;</span> WEIGHT_MAP <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedHashMap<span style="color:#f92672">&lt;</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">static</span> <span style="color:#f92672">{</span>
+        WEIGHT_MAP<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;192.168.0.1&#34;</span><span style="color:#f92672">,</span>2<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        WEIGHT_MAP<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;192.168.0.2&#34;</span><span style="color:#f92672">,</span>8<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        WEIGHT_MAP<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;192.168.0.3&#34;</span><span style="color:#f92672">,</span>1<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        WEIGHT_MAP<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;192.168.0.4&#34;</span><span style="color:#f92672">,</span>9<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        WEIGHT_MAP<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;192.168.0.5&#34;</span><span style="color:#f92672">,</span>4<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        WEIGHT_MAP<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;192.168.0.6&#34;</span><span style="color:#f92672">,</span>6<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><h4 id="31">3.1随机算法</h4>
+<p><strong>1.正常随机</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        Random random <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Random<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">return</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">LIST</span><span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>random<span style="color:#f92672">.</span><span style="color:#a6e22e">nextInt</span><span style="color:#f92672">(</span>ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">LIST</span><span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>s
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[</span><span style="color:#f92672">]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 10<span style="color:#f92672">;</span> i<span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>getServer<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>s
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>2.ip + 权重系数</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        List<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> ips <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">keySet</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">forEach</span><span style="color:#f92672">(</span>ip <span style="color:#f92672">-</span><span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+            Integer weight <span style="color:#f92672">=</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>ip<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> weight<span style="color:#f92672">;</span> i<span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                ips<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>ip<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        Random random <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Random<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">return</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">LIST</span><span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>random<span style="color:#f92672">.</span><span style="color:#a6e22e">nextInt</span><span style="color:#f92672">(</span>ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">LIST</span><span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[</span><span style="color:#f92672">]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 10<span style="color:#f92672">;</span> i<span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>getServer<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>3.随机分配理解和改进</strong></p>
+<p>A服务器权重系数为5     也是服务器调用的次数</p>
+<p>B	为	3</p>
+<p>C	为	2</p>
+<p>看作数组为[5,3,2],看作定点长  5+3+2 = 10 权重总和</p>
+<p>0&mdash;&ndash;5&mdash;8&ndash;10</p>
+<p>​		A	B  C   服务器所在位置</p>
+<p>1.假设一个随机数offest = 7;随机0-5则取A,5-8则取B,8-10则取C,但是0-5的距离长所以占权重也多.</p>
+<p>2.因为随机是7所以定点落在A-B上.</p>
+<p>offest &gt; 5; offest = offest - 5; offest = 2;</p>
+<p>定点坐标改变为 0&mdash;3&ndash;5 :因为减去了5</p>
+<p>offest &lt; 3;return B;	减去的步骤是将A服务器排除,同时offest一定要比服务器数值小.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">//流计算整数和
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> totalWeight <span style="color:#f92672">=</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">values</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapToInt</span><span style="color:#f92672">(</span>weight <span style="color:#f92672">-</span><span style="color:#f92672">&gt;</span> weight<span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sum</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#75715e">//System.out.println(totalWeight);
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> offest <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Random<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">nextInt</span><span style="color:#f92672">(</span>totalWeight<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>String ip <span style="color:#f92672">:</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">keySet</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            Integer weight <span style="color:#f92672">=</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>ip<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>offest <span style="color:#f92672">&lt;</span> weight<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">return</span> ip<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+            offest <span style="color:#f92672">=</span> offest <span style="color:#f92672">-</span> weight<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        Random random <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Random<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">return</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">LIST</span><span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>random<span style="color:#f92672">.</span><span style="color:#a6e22e">nextInt</span><span style="color:#f92672">(</span>ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">LIST</span><span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[</span><span style="color:#f92672">]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 10<span style="color:#f92672">;</span> i<span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>getServer<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><h4 id="32">3.2轮询算法</h4>
+<p><strong>1.正常实现</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Integer pos <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> <span style="color:#75715e">//轮询下标
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>pos <span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">LIST</span><span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            pos <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        String ip <span style="color:#f92672">=</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">LIST</span><span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>pos<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        pos <span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">return</span> ip<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[</span><span style="color:#f92672">]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 20<span style="color:#f92672">;</span> i<span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>getServer<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>2.考虑权重去实现</strong></p>
+<p>假设offest = 1,2,3,4,5,&hellip;有规律的递增的轮询,也可以通过上述实现(递增的范围跟服务器的权重总和有关)</p>
+<p>A服务器权重系数为5     也是服务器调用的次数</p>
+<p>B	为	3</p>
+<p>C	为	2</p>
+<p>offest &gt; 5; offest = offest - 5; offest = 2;</p>
+<p>offest &lt; 3;return B;</p>
+<p>则出现: AAAAABBBCC</p>
+<blockquote>
+<p>同时我们可以得出上述逻辑根据offest的结果不同则产生的影响也不同,在轮询随机中都可以采用这种算法</p>
+</blockquote>
+<p>我们实现轮询可以根据requestID(主键递增的),如果ID到达1000,1001&hellip;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//requestID的生成
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Integer num <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Integer <span style="color:#a6e22e">getAndIncrement</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> num<span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>1.我们采用%实现</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">int</span> totalWeight <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Integer weight <span style="color:#f92672">:</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">values</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            totalWeight <span style="color:#f92672">+</span><span style="color:#f92672">=</span> weight<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">int</span> requestID <span style="color:#f92672">=</span> RequestID<span style="color:#f92672">.</span><span style="color:#a6e22e">getAndIncrement</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span> <span style="color:#75715e">//0--10000
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> offset <span style="color:#f92672">=</span> requestID <span style="color:#f92672">%</span> totalWeight<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>String ip <span style="color:#f92672">:</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">keySet</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            Integer weight <span style="color:#f92672">=</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>ip<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>offset <span style="color:#f92672">&lt;</span> weight<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">return</span> ip<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+
+            offset <span style="color:#f92672">=</span> offset <span style="color:#f92672">-</span> weight<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[</span><span style="color:#f92672">]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 20<span style="color:#f92672">;</span> i<span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>getServer<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>这样实现产生问题:如果</p>
+<p>A服务器权重系数为5     也是服务器调用的次数</p>
+<p>B	为	1</p>
+<p>C	为	1</p>
+<p>则产生AAAAABC,但是采用平衡加权轮询算法则可以产生AABACAA,可以使得某时刻A服务器的压力不是那么大</p>
+<p><strong>问题:那么轮询之后还是会使得A服务器上压力过大?</strong></p>
+<p><strong>2.平衡加权轮询算法(Nginx中默认采用的)</strong>
+<img src="https://img-blog.csdnimg.cn/20200224111935466.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzMwODQwNg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">
+同时他的结果也很平滑   AABACAA</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Weight</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> String ip<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> Integer weight<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> Integer currentWeight<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">	<span style="color:#75715e">/**
+</span><span style="color:#75715e">     * 平衡加权轮询算法实现
+</span><span style="color:#75715e">     */</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span>Weight<span style="color:#f92672">&gt;</span> weightMap <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedHashMap<span style="color:#f92672">&lt;</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>weightMap<span style="color:#f92672">.</span><span style="color:#a6e22e">isEmpty</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>String ip <span style="color:#f92672">:</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">keySet</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                Integer weight <span style="color:#f92672">=</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>ip<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+
+                weightMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>ip<span style="color:#f92672">,</span><span style="color:#66d9ef">new</span> Weight<span style="color:#f92672">(</span>ip<span style="color:#f92672">,</span>weight<span style="color:#f92672">,</span>0<span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#75715e">//1.currentWeight += weight
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Weight weight <span style="color:#f92672">:</span> weightMap<span style="color:#f92672">.</span><span style="color:#a6e22e">values</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            weight<span style="color:#f92672">.</span><span style="color:#a6e22e">setCurrentWeight</span><span style="color:#f92672">(</span>weight<span style="color:#f92672">.</span><span style="color:#a6e22e">getCurrentWeight</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">+</span> weight<span style="color:#f92672">.</span><span style="color:#a6e22e">getWeight</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#75715e">//2.max(currentWeight)
+</span><span style="color:#75715e"></span>        Weight maxCurrentWeight <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Weight weight <span style="color:#f92672">:</span> weightMap<span style="color:#f92672">.</span><span style="color:#a6e22e">values</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>maxCurrentWeight <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">|</span><span style="color:#f92672">|</span> weight<span style="color:#f92672">.</span><span style="color:#a6e22e">getCurrentWeight</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">&gt;</span>
+                    maxCurrentWeight<span style="color:#f92672">.</span><span style="color:#a6e22e">getCurrentWeight</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                maxCurrentWeight <span style="color:#f92672">=</span> weight<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">int</span> totalWeight <span style="color:#f92672">=</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">WEIGHT_MAP</span><span style="color:#f92672">.</span><span style="color:#a6e22e">values</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapToInt</span><span style="color:#f92672">(</span>weight <span style="color:#f92672">-</span><span style="color:#f92672">&gt;</span> weight<span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sum</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#75715e">//4.max(currentWeight) -= sum(weight);
+</span><span style="color:#75715e"></span>        maxCurrentWeight<span style="color:#f92672">.</span><span style="color:#a6e22e">setCurrentWeight</span><span style="color:#f92672">(</span>maxCurrentWeight<span style="color:#f92672">.</span><span style="color:#a6e22e">getCurrentWeight</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">-</span> totalWeight<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+
+        <span style="color:#75715e">//5.return
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> maxCurrentWeight<span style="color:#f92672">.</span><span style="color:#a6e22e">getIp</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+</code></pre></div><h4 id="33">3.3一致哈希算法</h4>
+<ul>
+<li>
+<p>问题:服务器集群中,用户访问分配给第一台服务器有用户的session,但是再次请求中分配给第二台没有的session,重新登陆的不同步问题?</p>
+</li>
+<li>
+<p>解决:redis ,tomact ,一致hash算法</p>
+</li>
+</ul>
+<p>一致哈希算法:要保证同一个用户接下来的请求的负载均衡通过客户端的ip,或请求路径与请求参数产生hash值指向同一个服务器.</p>
+<p>因为客户端发起的请求情况是无穷尽的(客户但地址不同,请求参数不同),所以对于的hash值也是无穷大的,所以我们不可能把所有的hash值都进行映射到服务器端ip上,所以这里需要用到<strong>hash环</strong>.</p>
+<p><img src="https://img-blog.csdnimg.cn/20200224112008345.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzMwODQwNg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>每一个IP对应的hashCode是存在环上的 ,同时呈现出来顺时针的走势,如果hash值在ip1到ip2之间则如图指向的是ip2作为结果.</p>
+<ul>
+<li>
+<p>问题:但是如果ip4挂掉了,那么请求将放到ip1上面,因为是顺时针.产生了不公平?</p>
+</li>
+<li>
+<p>解决:需要加入<strong>虚拟节点</strong>,如:(是将请求平均分配了下)</p>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200224112022906.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzMwODQwNg==,size_16,color_FFFFFF,t_70" alt=""></p>
+<p>其中ip2-1,ip3-1就是虚拟节点,并不能处理节点,而是等同于对应的ip2和ip3服务器.</p>
+<p>实际上,这只是处理这种不均衡性的一种思路,实际上就算哈希环本身是均衡的,你也可以增加更多的虚拟节点来使这个环更加平滑,比如:
+<img src="https://img-blog.csdnimg.cn/20200224112044696.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzMwODQwNg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">
+这个彩虹环也是&quot;公平的&rdquo;,并且只有ip 1,2,3,4使实际的服务器ip,其他的都是虚拟IP;</p>
+<p>步骤:</p>
+<p>1.&gt; hashCode,虚拟节点</p>
+<p>2.采用treemap实现有序</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> TreeMap<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">,</span>String<span style="color:#f92672">&gt;</span> treeMap <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TreeMap<span style="color:#f92672">&lt;</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> VIRTUAL_NODES <span style="color:#f92672">=</span> 160<span style="color:#f92672">;</span> <span style="color:#75715e">//虚拟节点
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">static</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>String ip <span style="color:#f92672">:</span> ClentTest<span style="color:#f92672">.</span><span style="color:#a6e22e">LIST</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> VIRTUAL_NODES<span style="color:#f92672">;</span> i<span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">int</span> hash <span style="color:#f92672">=</span> getHash<span style="color:#f92672">(</span>ip <span style="color:#f92672">+</span> i<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+                treeMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>hash<span style="color:#f92672">,</span>ip<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span>String client<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">int</span> hash <span style="color:#f92672">=</span> getHash<span style="color:#f92672">(</span>client<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#75715e">//找大于hash,treeMap的子树的第一个firstKey
+</span><span style="color:#75715e"></span>        SortedMap<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">,</span> String<span style="color:#f92672">&gt;</span> subMap <span style="color:#f92672">=</span> treeMap<span style="color:#f92672">.</span><span style="color:#a6e22e">tailMap</span><span style="color:#f92672">(</span>hash<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        Integer firstKey <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>subMap <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            firstKey <span style="color:#f92672">=</span> treeMap<span style="color:#f92672">.</span><span style="color:#a6e22e">firstKey</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            firstKey <span style="color:#f92672">=</span> subMap<span style="color:#f92672">.</span><span style="color:#a6e22e">firstKey</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">return</span> treeMap<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>firstKey<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+
+    <span style="color:#f92672">}</span>
+
+	<span style="color:#75715e">//计算hash
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getHash</span><span style="color:#f92672">(</span>String str<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> p <span style="color:#f92672">=</span> 16777619<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">int</span> hash <span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">)</span>2166136261L<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>i <span style="color:#f92672">&lt;</span> str<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>i<span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            hash <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>hash <span style="color:#f92672">^</span> str<span style="color:#f92672">.</span><span style="color:#a6e22e">charAt</span><span style="color:#f92672">(</span>i<span style="color:#f92672">)</span> <span style="color:#f92672">*</span> p<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        hash <span style="color:#f92672">+</span><span style="color:#f92672">=</span> hash <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> 13<span style="color:#f92672">;</span>
+        hash <span style="color:#f92672">^</span><span style="color:#f92672">=</span> hash <span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span> 7<span style="color:#f92672">;</span>
+        hash <span style="color:#f92672">+</span><span style="color:#f92672">=</span> hash <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> 3<span style="color:#f92672">;</span>
+        hash <span style="color:#f92672">^</span><span style="color:#f92672">=</span> hash <span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span> 17<span style="color:#f92672">;</span>
+        hash <span style="color:#f92672">+</span><span style="color:#f92672">=</span> hash <span style="color:#f92672">&lt;</span><span style="color:#f92672">&lt;</span> 5<span style="color:#f92672">;</span>
+        <span style="color:#75715e">//算出为负数取其绝对值
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>hash <span style="color:#f92672">&lt;</span> 0<span style="color:#f92672">)</span> hash <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">abs</span><span style="color:#f92672">(</span>hash<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">return</span> hash<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[</span><span style="color:#f92672">]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 12<span style="color:#f92672">;</span> i<span style="color:#f92672">+</span><span style="color:#f92672">+</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>getServer<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;client&#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div>
+  
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://hyontheway.github.io/post/%E6%94%AF%E4%BB%98%E4%B8%AD%E5%B8%B8%E8%A7%81%E5%B9%82%E7%AD%89%E8%AE%BE%E8%AE%A1/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://hyontheway.github.io/post/%E6%94%AF%E4%BB%98%E4%B8%AD%E5%B8%B8%E8%A7%81%E5%B9%82%E7%AD%89%E8%AE%BE%E8%AE%A1/">支付中常见幂等设计</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'HY';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  [负载均衡]
+  [总结]
+
+</div>
+
+</div>
+</div>
+<script src="https://hyontheway.github.io/js/ui.js"></script>
+<script src="https://hyontheway.github.io/js/menus.js"></script>
+
+
+<script>
+  
+  if (window.location.hostname != "localhost") {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'Your Google Analytics tracking ID', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
+
