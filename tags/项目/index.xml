@@ -30,14 +30,5 @@
       <description>订单重复提交问题 1.原因: 1.网络延迟的情况下让用户有时间点击多次提交按钮导致表单重复提交. 2.表单提交后用户点击浏览器的刷新导致表单重复提</description>
     </item>
     
-    <item>
-      <title>订单中的减库存操作解析</title>
-      <link>https://hyontheway.github.io/post/%E8%AE%A2%E5%8D%95%E4%B8%AD%E7%9A%84%E5%87%8F%E5%BA%93%E5%AD%98%E6%93%8D%E4%BD%9C%E8%A7%A3%E6%9E%90/</link>
-      <pubDate>Fri, 14 Feb 2020 16:00:36 +0800</pubDate>
-      
-      <guid>https://hyontheway.github.io/post/%E8%AE%A2%E5%8D%95%E4%B8%AD%E7%9A%84%E5%87%8F%E5%BA%93%E5%AD%98%E6%93%8D%E4%BD%9C%E8%A7%A3%E6%9E%90/</guid>
-      <description>订单业务中减库存操作涉及到的分布式事务问题与线程安全问题 一.分析减库存的业务实现 减库存可以采用同步调用（Feign的方式），也可以采用异步调</description>
-    </item>
-    
   </channel>
 </rss>
